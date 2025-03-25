@@ -13,10 +13,10 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
 
-    int n, s;
+    ll n, s;
     cin >> n >> s;
-    vector<int> a(n);
-    for (int i = 0; i < n; i++) {
+    vector<ll> a(n);
+    for (ll i = 0; i < n; i++) {
         cin >> a[i];
     }
 
@@ -27,36 +27,32 @@ int main() {
 
     sort(a.begin(), a.end());
 
-    auto check = [&](int x) -> bool {
-        int ones = 0, twos = 0;
-        int need = 0;
-        for (int i = 0; i < x - 2; i++) {
+    auto check = [&](ll x) -> bool {
+        ll ones = 0, twos = 0;
+        ll need = 0;
+        for (ll i = 0; i < x - 2; i++) {
             if (a[i] % 3 == 0) {
                 need += a[i] / 3;
             } else if (a[i] % 3 == 1) {
                 need += a[i] / 3 + 1;
-                if (a[i] > 3 && twos > 0) {
-                    twos--;
-                    need--;
-                } else {
-                    ones++;
-                }
+                if (a[i] > 3) ones++;
             } else {
                 need += a[i] / 3 + 1;
-                if (a[i] > 3 && ones > 0) {
-                    ones--;
-                    need--;
-                } else {
-                    twos++;
-                }
+                if (a[i] > 3) twos++;
             }
         }
+
+        dbg(need, ones, twos);
+        ll p = min(ones, twos);
+        need -= p;
+        ones -= p, twos -= p;
+        need -= ones / 2;
         return need <= s - 2;
     };
 
-    int l = 1, r = n, ans = 1;
+    ll l = 1, r = n, ans = 1;
     while (l <= r) {
-        int mid = (l + r) / 2;
+        ll mid = (l + r) / 2;
         if (check(mid)) {
             l = mid + 1;
             ans = mid;
