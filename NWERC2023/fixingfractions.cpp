@@ -17,11 +17,12 @@ int main() {
     cin >> a >> b >> c >> d;
 
     int na = to_string(a).length();
+    dbg(na);
     ll tmp = a;
     ll g = gcd(c, d);
     c /= g, d /= g;
 
-    vector<int> da(na);
+    vector<int> da;
     for (int i = 0; i < na; i++) {
         da.push_back(tmp % 10); 
         tmp /= 10;
@@ -52,8 +53,8 @@ int main() {
         } else {
             vector<int> cnt(10);
             for (int i = 0; i < na; i++) {
-                if ((bits >> i) & 1) {
-                    cnt[da[i] - '0']++;
+                if (!((bits >> i) & 1)) {
+                    cnt[da[i]]++;
                 }
             }
             if (possible_b[x] != 1) return false;
@@ -69,13 +70,14 @@ int main() {
     for (int i = 1; i < (1 << na); i++) {
         ll x = 0;
         int first_d = -1;
-        for (int b = na - 1; b >= 0; b--) {
+        for (int b = 0; b < na; b++) {
             if ((i >> b) & 1) {
                 x = x * 10 + da[b];
                 if (first_d == -1) first_d = da[b];
             }
         }
         if (first_d == 0) continue;
+        dbg(x);
 
         if (x % c == 0) {
             ll bp = x / c;
@@ -83,6 +85,7 @@ int main() {
             bp *= d;
             if (check(bp, b, i)) {
                 cout << "possible\n";
+                cout << x << " " << bp << "\n";
                 return 0;
             }
         }
